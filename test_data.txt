@@ -1,0 +1,287 @@
+================================================================================
+  DATA TESTING UNTUK APLIKASI SPK PEMILIHAN JURUSAN
+  Gunakan data ini untuk testing dan demo aplikasi
+================================================================================
+
+📝 CARA MENGGUNAKAN:
+   1. Jalankan aplikasi (streamlit run app.py)
+   2. Copy data dari sini ke form input
+   3. Klik "Hitung Rekomendasi"
+   4. Lihat hasilnya dan bandingkan dengan ekspektasi
+
+================================================================================
+TEST CASE 1: SISWA IPA DENGAN NILAI TINGGI
+================================================================================
+
+INPUT:
+------
+Nama Lengkap          : Ahmad Rizki Pratama
+Nilai Akademik        : 85
+Minat Bidang Studi    : IPA
+Kemampuan Ekonomi     : Sedang
+Prioritas Prospek     : 90
+
+HASIL YANG DIHARAPKAN:
+----------------------
+Rekomendasi Terbaik   : Teknik Informatika
+Nilai SAW             : ~0.9250
+Ranking:
+  1. Teknik Informatika  (0.9250)
+  2. Teknik Sipil        (0.8xxx)
+  3. Akuntansi           (0.7xxx)
+  4. Manajemen           (0.7xxx)
+  5. Psikologi           (0.6xxx)
+
+ANALISIS:
+---------
+- Nilai tinggi (85) cocok untuk Teknik Informatika (standar 85)
+- Minat IPA sangat cocok (R2 = 1.0)
+- Ekonomi sedang cukup OK untuk biaya tinggi (R3 = 0.7)
+- Prospek kerja tinggi (90) cocok dengan prospek TI (95)
+
+================================================================================
+TEST CASE 2: SISWA IPS DENGAN EKONOMI TERBATAS
+================================================================================
+
+INPUT:
+------
+Nama Lengkap          : Siti Nurhaliza
+Nilai Akademik        : 78
+Minat Bidang Studi    : IPS
+Kemampuan Ekonomi     : Rendah
+Prioritas Prospek     : 85
+
+HASIL YANG DIHARAPKAN:
+----------------------
+Rekomendasi Terbaik   : Manajemen atau Akuntansi
+Nilai SAW             : ~0.8500 - 0.9000
+Ranking:
+  1. Akuntansi           (0.8xxx)
+  2. Manajemen           (0.8xxx)
+  3. Psikologi           (0.7xxx)
+  4. Teknik Informatika  (0.6xxx)
+  5. Teknik Sipil        (0.6xxx)
+
+ANALISIS:
+---------
+- Nilai 78 pas untuk Akuntansi (standar 78)
+- Minat IPS cocok dengan Manajemen & Akuntansi (R2 = 1.0)
+- Ekonomi rendah → prioritas jurusan biaya sedang (R3 tinggi)
+- Teknik (biaya tinggi) akan ranking rendah
+
+================================================================================
+TEST CASE 3: SISWA IPA DENGAN EKONOMI BAIK
+================================================================================
+
+INPUT:
+------
+Nama Lengkap          : Budi Santoso
+Nilai Akademik        : 82
+Minat Bidang Studi    : IPA
+Kemampuan Ekonomi     : Tinggi
+Prioritas Prospek     : 75
+
+HASIL YANG DIHARAPKAN:
+----------------------
+Rekomendasi Terbaik   : Teknik Informatika
+Nilai SAW             : ~0.8800 - 0.9200
+Ranking:
+  1. Teknik Informatika  (0.8xxx)
+  2. Teknik Sipil        (0.8xxx)
+  3. Akuntansi           (0.7xxx)
+  4. Manajemen           (0.7xxx)
+  5. Psikologi           (0.6xxx)
+
+ANALISIS:
+---------
+- Nilai 82 bagus untuk jurusan IPA
+- Minat IPA cocok (R2 = 1.0)
+- Ekonomi tinggi → biaya bukan masalah (bisa ambil jurusan mahal)
+- Prospek 75 (sedang) masih oke
+
+================================================================================
+TEST CASE 4: SISWA SENI DENGAN PROSPEK RENDAH
+================================================================================
+
+INPUT:
+------
+Nama Lengkap          : Dina Anggraini
+Nilai Akademik        : 76
+Minat Bidang Studi    : Seni
+Kemampuan Ekonomi     : Sedang
+Prioritas Prospek     : 60
+
+HASIL YANG DIHARAPKAN:
+----------------------
+Rekomendasi Terbaik   : Psikologi
+Nilai SAW             : ~0.8000 - 0.8500
+Ranking:
+  1. Psikologi           (0.8xxx)
+  2. Manajemen           (0.7xxx)
+  3. Akuntansi           (0.7xxx)
+  4. Teknik Sipil        (0.6xxx)
+  5. Teknik Informatika  (0.6xxx)
+
+ANALISIS:
+---------
+- Nilai 76 tepat untuk Psikologi (standar 76)
+- Minat Seni hanya cocok dengan Psikologi (R2 = 1.0)
+- Untuk jurusan lain, R2 = 0.6 (minat tidak cocok)
+- Prospek tidak terlalu diprioritaskan (60)
+
+================================================================================
+TEST CASE 5: NILAI RENDAH DENGAN EKONOMI TERBATAS
+================================================================================
+
+INPUT:
+------
+Nama Lengkap          : Eko Prasetyo
+Nilai Akademik        : 70
+Minat Bidang Studi    : IPS
+Kemampuan Ekonomi     : Rendah
+Prioritas Prospek     : 50
+
+HASIL YANG DIHARAPKAN:
+----------------------
+Rekomendasi Terbaik   : Manajemen
+Nilai SAW             : ~0.7500 - 0.8000
+Ranking:
+  1. Manajemen           (0.7xxx)
+  2. Psikologi           (0.7xxx)
+  3. Akuntansi           (0.6xxx)
+  4. Teknik Sipil        (0.5xxx)
+  5. Teknik Informatika  (0.5xxx)
+
+ANALISIS:
+---------
+- Nilai 70 di bawah standar semua jurusan → R1 < 1.0
+- Minat IPS cocok dengan Manajemen & Akuntansi
+- Ekonomi rendah → prioritas jurusan biaya sedang
+- Prospek rendah (50) → tidak terlalu pengaruh
+
+================================================================================
+TEST CASE 6: NILAI SEMPURNA DENGAN PRIORITAS PROSPEK TINGGI
+================================================================================
+
+INPUT:
+------
+Nama Lengkap          : Rina Wijaya
+Nilai Akademik        : 95
+Minat Bidang Studi    : IPA
+Kemampuan Ekonomi     : Tinggi
+Prioritas Prospek     : 100
+
+HASIL YANG DIHARAPKAN:
+----------------------
+Rekomendasi Terbaik   : Teknik Informatika
+Nilai SAW             : ~0.9800 - 1.0000
+Ranking:
+  1. Teknik Informatika  (0.9xxx - 1.0)
+  2. Teknik Sipil        (0.9xxx)
+  3. Akuntansi           (0.8xxx)
+  4. Manajemen           (0.8xxx)
+  5. Psikologi           (0.7xxx)
+
+ANALISIS:
+---------
+- Nilai 95 jauh di atas standar semua jurusan → R1 > 1.0
+- Minat IPA cocok sempurna
+- Ekonomi tinggi → bisa ambil jurusan manapun
+- Prospek 100 (maksimal) → TI prospek terbaik (95)
+- Kombinasi sempurna untuk Teknik Informatika!
+
+================================================================================
+TEMPLATE KOSONG UNTUK TESTING SENDIRI
+================================================================================
+
+INPUT:
+------
+Nama Lengkap          : __________________
+Nilai Akademik        : _____ (0-100)
+Minat Bidang Studi    : _____ (IPA/IPS/Seni)
+Kemampuan Ekonomi     : _____ (Rendah/Sedang/Tinggi)
+Prioritas Prospek     : _____ (0-100)
+
+HASIL AKTUAL:
+-------------
+Rekomendasi Terbaik   : __________________
+Nilai SAW             : __________________
+
+RANKING:
+--------
+1. __________________ (______)
+2. __________________ (______)
+3. __________________ (______)
+4. __________________ (______)
+5. __________________ (______)
+
+CATATAN:
+--------
+__________________________________________________________
+__________________________________________________________
+__________________________________________________________
+
+================================================================================
+TIPS TESTING:
+================================================================================
+
+1. TESTING EXTREME VALUES:
+   - Coba nilai 0, 50, 100
+   - Coba semua kombinasi minat & ekonomi
+
+2. TESTING EDGE CASES:
+   - Nilai sama dengan standar jurusan (R1 = 1.0)
+   - Minat cocok vs tidak cocok
+   - Ekonomi rendah + jurusan mahal
+
+3. VALIDASI HASIL:
+   - Pastikan ranking masuk akal
+   - Cek detail perhitungan (R1, R2, R3, R4)
+   - Verifikasi bobot diaplikasikan dengan benar
+
+4. TESTING CONSISTENCY:
+   - Test dengan data yang sama 2x, hasilnya harus sama
+   - Ubah sedikit nilai, lihat perubahan ranking
+
+5. USER EXPERIENCE:
+   - Coba isi form dengan cepat
+   - Coba kosongkan field (harus ada validasi error)
+   - Coba download CSV
+
+================================================================================
+DEBUGGING CHECKLIST:
+================================================================================
+
+Jika hasil tidak sesuai ekspektasi, cek:
+
+[ ] Apakah bobot kriteria sudah benar? (total = 100%)
+[ ] Apakah normalisasi benefit/cost sudah benar?
+[ ] Apakah data jurusan sudah sesuai?
+[ ] Apakah formula SAW sudah benar?
+[ ] Apakah mapping ekonomi & biaya sudah tepat?
+[ ] Apakah sorting ranking descending (terbesar dulu)?
+
+================================================================================
+CONTOH OUTPUT CSV YANG BENAR:
+================================================================================
+
+Ranking,Kode,Jurusan,Nilai SAW
+1,A1,Teknik Informatika,0.9250
+2,A4,Teknik Sipil,0.8125
+3,A3,Akuntansi,0.7842
+4,A2,Manajemen,0.7650
+5,A5,Psikologi,0.6980
+
+================================================================================
+SELAMAT TESTING! 🚀
+================================================================================
+
+Gunakan data-data di atas untuk:
+✅ Testing fungsionalitas aplikasi
+✅ Demo saat presentasi
+✅ Verifikasi kebenaran algoritma
+✅ Training untuk memahami logika SAW
+
+Good luck! 💪
+
+================================================================================

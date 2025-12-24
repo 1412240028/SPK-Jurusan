@@ -1,0 +1,21 @@
+# ========================================
+# Requirements untuk SPK Pemilihan Jurusan
+# ========================================
+
+# Framework utama untuk web app
+streamlit==1.32.0
+
+# Library untuk data manipulation
+pandas==2.2.0
+numpy==1.26.3
+
+# Library untuk visualisasi
+matplotlib==3.8.2
+seaborn==0.13.2
+
+# Library tambahan (opsional)
+plotly==5.18.0          # Untuk visualisasi interaktif
+openpyxl==3.1.2         # Untuk export ke Excel
+
+# Library untuk styling (opsional)
+Pillow==10.2.0          # Untuk manipulasi gambar

@@ -1,0 +1,298 @@
+================================================================================
+  PANDUAN SETUP LENGKAP - SPK PEMILIHAN JURUSAN
+  Sistem Pendukung Keputusan dengan Metode SAW
+================================================================================
+
+📋 DAFTAR ISI:
+  1. Persiapan Awal
+  2. Setup Project
+  3. Menjalankan Aplikasi
+  4. Testing Aplikasi
+  5. Troubleshooting
+  6. Tips & Tricks
+
+================================================================================
+1. PERSIAPAN AWAL
+================================================================================
+
+✅ PASTIKAN SUDAH TERINSTALL:
+   - Python 3.8 atau lebih baru
+   - pip (Python package manager)
+   - VS Code (atau text editor lain)
+   - Git (opsional)
+
+📝 CEK VERSI PYTHON:
+   Buka Command Prompt/Terminal, ketik:
+   
+   python --version
+   atau
+   python3 --version
+   
+   Harus muncul: Python 3.8.x atau lebih baru
+
+📝 CEK PIP:
+   pip --version
+   
+   Jika belum ada, install dengan:
+   python -m ensurepip --upgrade
+
+================================================================================
+2. SETUP PROJECT
+================================================================================
+
+LANGKAH 1: BUAT FOLDER PROJECT
+-------------------------------
+1. Buat folder baru dengan nama: SPK-Jurusan
+2. Buka VS Code
+3. File > Open Folder > Pilih folder SPK-Jurusan
+
+LANGKAH 2: BUAT STRUKTUR FOLDER
+--------------------------------
+Di dalam folder SPK-Jurusan, buat struktur seperti ini:
+
+SPK-Jurusan/
+├── data/
+├── utils/
+└── assets/
+
+Cara membuat di VS Code:
+- Klik icon "New Folder" di Explorer
+- Buat folder: data, utils, assets
+
+LANGKAH 3: BUAT FILE-FILE YANG DIBUTUHKAN
+------------------------------------------
+Buat file-file berikut (klik icon "New File" di VS Code):
+
+1. app.py (di root folder)
+2. requirements.txt (di root folder)
+3. README.md (di root folder)
+4. data/jurusan_data.py
+5. utils/saw_calculator.py
+
+Kemudian copy-paste kode dari artifact yang sudah saya berikan!
+
+LANGKAH 4: INSTALL DEPENDENCIES
+--------------------------------
+1. Buka Terminal di VS Code (View > Terminal atau Ctrl + `)
+2. Jalankan perintah:
+
+   pip install -r requirements.txt
+
+3. Tunggu sampai selesai (biasanya 1-2 menit)
+
+LANGKAH 5: VERIFIKASI INSTALASI
+--------------------------------
+Jalankan perintah ini untuk cek apakah semua library terinstall:
+
+   python -c "import streamlit; print('Streamlit OK')"
+   python -c "import pandas; print('Pandas OK')"
+   python -c "import matplotlib; print('Matplotlib OK')"
+
+Jika muncul "OK" semua, berarti instalasi berhasil!
+
+================================================================================
+3. MENJALANKAN APLIKASI
+================================================================================
+
+CARA 1: MENJALANKAN APLIKASI
+-----------------------------
+1. Pastikan Terminal terbuka di folder SPK-Jurusan
+2. Ketik perintah:
+
+   streamlit run app.py
+
+3. Tunggu beberapa detik
+4. Browser akan otomatis terbuka di: http://localhost:8501
+5. Jika tidak otomatis, buka browser dan ketik: localhost:8501
+
+CARA 2: MENJALANKAN DI PORT LAIN
+---------------------------------
+Jika port 8501 sudah dipakai:
+
+   streamlit run app.py --server.port 8502
+
+CARA STOP APLIKASI:
+-------------------
+Tekan Ctrl + C di Terminal
+
+================================================================================
+4. TESTING APLIKASI
+================================================================================
+
+CONTOH DATA TESTING 1:
+----------------------
+Nama: Ahmad Rizki
+Nilai Akademik: 85
+Minat: IPA
+Ekonomi: Sedang
+Prospek Kerja: 90
+
+HASIL YANG DIHARAPKAN:
+→ Rekomendasi: Teknik Informatika
+→ Nilai SAW sekitar: 0.92-0.93
+
+CONTOH DATA TESTING 2:
+----------------------
+Nama: Siti Nurhaliza
+Nilai Akademik: 78
+Minat: IPS
+Ekonomi: Rendah
+Prospek Kerja: 85
+
+HASIL YANG DIHARAPKAN:
+→ Rekomendasi: Manajemen atau Akuntansi
+→ Nilai SAW sekitar: 0.85-0.90
+
+CONTOH DATA TESTING 3:
+----------------------
+Nama: Budi Santoso
+Nilai Akademik: 82
+Minat: IPA
+Ekonomi: Tinggi
+Prospek Kerja: 75
+
+HASIL YANG DIHARAPKAN:
+→ Rekomendasi: Teknik Informatika atau Teknik Sipil
+→ Nilai SAW sekitar: 0.88-0.92
+
+CHECKLIST TESTING:
+------------------
+[ ] Form input berfungsi dengan baik
+[ ] Tombol "Hitung Rekomendasi" berfungsi
+[ ] Hasil rekomendasi muncul dengan benar
+[ ] Tabel ranking tampil lengkap
+[ ] Grafik bar chart muncul
+[ ] Detail perhitungan bisa dibuka
+[ ] Tombol download CSV berfungsi
+[ ] Tidak ada error di console
+
+================================================================================
+5. TROUBLESHOOTING
+================================================================================
+
+PROBLEM 1: "streamlit not found"
+---------------------------------
+SOLUSI:
+   pip install streamlit --upgrade
+
+PROBLEM 2: "No module named 'data'"
+------------------------------------
+SOLUSI:
+   - Pastikan file jurusan_data.py ada di folder data/
+   - Pastikan menjalankan "streamlit run app.py" dari root folder
+   - Cek struktur folder sudah benar
+
+PROBLEM 3: "Port 8501 already in use"
+--------------------------------------
+SOLUSI:
+   streamlit run app.py --server.port 8502
+
+PROBLEM 4: Import Error
+------------------------
+SOLUSI:
+   pip install -r requirements.txt --force-reinstall
+
+PROBLEM 5: Aplikasi Blank/Tidak Muncul
+---------------------------------------
+SOLUSI:
+   1. Clear browser cache (Ctrl + Shift + Delete)
+   2. Tekan tombol "C" di keyboard untuk clear Streamlit cache
+   3. Restart aplikasi (Ctrl+C lalu run ulang)
+
+PROBLEM 6: Error saat Hitung
+-----------------------------
+SOLUSI:
+   - Pastikan semua field terisi
+   - Cek nilai akademik dan prospek kerja dalam range 0-100
+   - Cek file saw_calculator.py tidak ada typo
+
+PROBLEM 7: Grafik Tidak Muncul
+-------------------------------
+SOLUSI:
+   pip install matplotlib --upgrade
+
+================================================================================
+6. TIPS & TRICKS
+================================================================================
+
+💡 TIP 1: AUTO-RELOAD
+---------------------
+Streamlit otomatis reload saat kamu save file. Jadi kalau edit kode, 
+langsung save (Ctrl+S) dan lihat perubahan di browser!
+
+💡 TIP 2: DEBUGGING
+-------------------
+Untuk debug, tambahkan:
+   st.write("Debug:", variable_name)
+di kode kamu untuk lihat nilai variabel.
+
+💡 TIP 3: CLEAR CACHE
+---------------------
+Jika aplikasi bermasalah, tekan "C" di keyboard saat aplikasi jalan
+untuk clear cache Streamlit.
+
+💡 TIP 4: SHORTCUT VS CODE
+---------------------------
+- Ctrl + ` : Buka/tutup Terminal
+- Ctrl + P : Quick file open
+- Ctrl + Shift + P : Command Palette
+- Ctrl + / : Comment/uncomment
+
+💡 TIP 5: CUSTOMIZE DATA
+------------------------
+Untuk edit data jurusan, buka file: data/jurusan_data.py
+Untuk edit bobot, edit dictionary BOBOT_KRITERIA
+
+💡 TIP 6: EXPORT KE EXE (ADVANCED)
+----------------------------------
+Untuk jadikan file .exe yang bisa jalan tanpa install Python:
+   pip install pyinstaller
+   pyinstaller --onefile app.py
+
+💡 TIP 7: DEPLOY ONLINE (ADVANCED)
+----------------------------------
+Deploy gratis ke Streamlit Cloud:
+1. Push code ke GitHub
+2. Daftar di share.streamlit.io
+3. Connect dengan repo GitHub
+4. Deploy!
+
+================================================================================
+📞 BUTUH BANTUAN?
+================================================================================
+
+Jika masih ada masalah:
+1. Cek file README.md untuk dokumentasi lengkap
+2. Google error message yang muncul
+3. Cek Streamlit documentation: docs.streamlit.io
+4. Tanya ke Stack Overflow
+
+================================================================================
+✅ CHECKLIST SEBELUM PRESENTASI
+================================================================================
+
+[ ] Semua file sudah dibuat
+[ ] Dependencies terinstall
+[ ] Aplikasi berjalan tanpa error
+[ ] Testing dengan 3 contoh data berhasil
+[ ] Screenshot hasil untuk dokumentasi
+[ ] Paham cara kerja algoritma SAW
+[ ] Bisa jelaskan setiap kriteria & bobot
+[ ] Bisa demo semua fitur
+[ ] README.md sudah diisi lengkap
+[ ] Backup code di USB/cloud
+
+================================================================================
+🎉 SELAMAT! APLIKASI SPK KAMU SIAP DIGUNAKAN!
+================================================================================
+
+Good luck untuk presentasi dan ujian mata kuliah SPK!
+
+Jangan lupa:
+- Backup code secara berkala
+- Test dengan berbagai data
+- Pahami konsep SAW dengan baik
+
+Happy Coding! 🚀
+
+================================================================================
