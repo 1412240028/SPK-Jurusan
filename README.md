@@ -347,8 +347,8 @@ pip install -r requirements.txt --force-reinstall
 
 ## 👨‍💻 Kontributor
 
-- **[Nama Kamu]** - Developer Utama
-- **[Dosen Pembimbing]** - Supervisor
+- **[Dhoni Prasetya]** - Developer Utama
+- **[Not Found]** - Supervisor
 
 ---
 
