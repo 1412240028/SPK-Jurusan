@@ -250,13 +250,13 @@ V = 0.925
 ## 📸 Screenshot
 
 ### Tampilan Form Input
-![Form Input](assets/screenshot1.png)
+![Form Input](assets/InputForm.png)
 
 ### Hasil Rekomendasi
-![Hasil](assets/screenshot2.png)
+![Hasil](assets/ExampleResult.png)
 
 ### Visualisasi Chart
-![Chart](assets/screenshot3.png)
+![Chart](assets/ExampleChartResult.png)
 
 ---
 
