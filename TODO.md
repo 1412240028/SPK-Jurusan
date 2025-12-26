@@ -11,9 +11,9 @@ This TODO list outlines the testing plan for the SPK (Sistem Pendukung Keputusan
 
 ## Test Cases
 ### Test Case 1: Ahmad Rizki
-- [ ] Input: Nama: Ahmad Rizki, Nilai Akademik: 85, Minat: IPA, Ekonomi: Sedang, Prospek Kerja: 90
-- [ ] Expected: Rekomendasi: Teknik Informatika, Nilai SAW: 0.92-0.93
-- [ ] Verify recommendation appears correctly
+- [x] Input: Nama: Ahmad Rizki, Nilai Akademik: 85, Minat: IPA, Ekonomi: Sedang, Prospek Kerja: 90
+- [x] Expected: Rekomendasi: Teknik Informatika, Nilai SAW: 0.92-0.93
+- [x] Verify recommendation appears correctly
 
 ### Test Case 2: Siti Nurhaliza
 - [ ] Input: Nama: Siti Nurhaliza, Nilai Akademik: 78, Minat: IPS, Ekonomi: Rendah, Prospek Kerja: 85
@@ -26,14 +26,14 @@ This TODO list outlines the testing plan for the SPK (Sistem Pendukung Keputusan
 - [ ] Verify recommendation appears correctly
 
 ## Functional Testing Checklist
-- [ ] Form input functions properly (all fields accept input)
-- [ ] "Hitung Rekomendasi" button functions
-- [ ] Recommendation results display correctly
-- [ ] Ranking table displays completely
-- [ ] Bar chart graph appears
-- [ ] Calculation details can be opened
-- [ ] Download CSV button functions
-- [ ] No errors in console
+- [x] Form input functions properly (all fields accept input)
+- [x] "Hitung Rekomendasi" button functions
+- [x] Recommendation results display correctly
+- [x] Ranking table displays completely
+- [x] Bar chart graph appears
+- [x] Calculation details can be opened
+- [x] Download CSV button functions
+- [x] No errors in console
 
 ## Additional Testing
 - [ ] Test with invalid inputs (e.g., nilai > 100, empty fields)
