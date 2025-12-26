@@ -1,20 +1,10 @@
-# ========================================
-# Requirements untuk SPK Pemilihan Jurusan
-# Versi Pre-Built (Gak Perlu Compile)
-# ========================================
-
-# Framework utama untuk web app
-streamlit==1.40.1
-
-# Library untuk data manipulation (pre-built wheels)
-pandas==2.3.3
-numpy==2.4.0
-
-# Library untuk visualisasi
-matplotlib==3.10.8
-seaborn==0.13.2
-
-# Library tambahan
-plotly==6.5.0
-openpyxl==3.1.5
-Pillow==11.3.0
+# requirements.txt
+streamlit==1.32.0
+pandas==2.0.3
+numpy==1.24.3
+matplotlib==3.7.2
+seaborn==0.12.2
+plotly==5.17.0
+openpyxl==3.1.2
+Pillow==10.0.0
+reportlab==4.0.7
