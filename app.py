@@ -9,6 +9,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from data.jurusan_data import JURUSAN_DATA, BOBOT_KRITERIA
 from utils.saw_calculator import hitung_saw, format_hasil
+from utils.pdf_generator import generate_pdf_report
 
 # ========================================
 # KONFIGURASI HALAMAN
@@ -21,14 +22,14 @@ st.set_page_config(
 )
 
 # ========================================
-# CSS STYLING - ENHANCED VERSION
+# CSS STYLING - MOBILE FIRST APPROACH
 # ========================================
 st.markdown("""
 <style>
     /* Import Google Fonts */
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
     
-    /* Global Styling */
+    /* Global Reset & Base Styling */
     * {
         font-family: 'Inter', sans-serif;
     }
@@ -37,38 +38,50 @@ st.markdown("""
     #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
     
-    /* Main Container */
+    /* MOBILE FIRST: Base Styles for Mobile */
+    
+    /* Main Container - Mobile Default */
     .main {
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        padding: 2rem;
+        padding: 0.5rem;
     }
     
     .block-container {
         background: white;
-        border-radius: 20px;
-        padding: 2rem 3rem;
-        box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-        max-width: 1400px;
-        margin: 0 auto;
+        border-radius: 12px;
+        padding: 1rem;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        max-width: 100%;
     }
     
-    /* Sidebar Styling */
+    /* Sidebar - Mobile */
     [data-testid="stSidebar"] {
         background: linear-gradient(180deg, #1e3a8a 0%, #1e40af 100%);
-        padding: 2rem 1rem;
+        padding: 1rem 0.5rem;
     }
     
     [data-testid="stSidebar"] * {
         color: white !important;
     }
     
-    [data-testid="stSidebar"] hr {
-        border-color: rgba(255,255,255,0.2);
+    [data-testid="stSidebar"] h1 {
+        font-size: 1.2rem;
+        margin-top: 0.5rem;
     }
     
-    /* Header Styling */
+    [data-testid="stSidebar"] h3 {
+        font-size: 1rem;
+        margin-top: 1rem;
+    }
+    
+    [data-testid="stSidebar"] hr {
+        border-color: rgba(255,255,255,0.2);
+        margin: 1rem 0;
+    }
+    
+    /* Header - Mobile First */
     .main-header {
-        font-size: 3rem;
+        font-size: 1.5rem;
         font-weight: 800;
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         -webkit-background-clip: text;
@@ -76,87 +89,101 @@ st.markdown("""
         background-clip: text;
         text-align: center;
         margin-bottom: 0.5rem;
-        letter-spacing: -1px;
-        animation: fadeInDown 0.8s ease-out;
+        line-height: 1.3;
     }
     
     .sub-header {
         text-align: center;
         color: #6b7280;
-        font-size: 1.1rem;
-        margin-bottom: 2rem;
+        font-size: 0.85rem;
+        margin-bottom: 1rem;
         font-weight: 500;
-        animation: fadeInUp 0.8s ease-out;
     }
     
-    /* Info Box */
+    /* Info Box - Mobile Optimized */
     .info-box {
-        padding: 1.5rem;
-        border-radius: 15px;
+        padding: 0.8rem;
+        border-radius: 10px;
         background: linear-gradient(135deg, #e0e7ff 0%, #e0f2fe 100%);
-        border-left: 5px solid #3b82f6;
-        margin: 1.5rem 0;
-        box-shadow: 0 4px 15px rgba(59, 130, 246, 0.1);
-        animation: slideInLeft 0.6s ease-out;
+        border-left: 4px solid #3b82f6;
+        margin: 1rem 0;
+        box-shadow: 0 2px 8px rgba(59, 130, 246, 0.1);
+        font-size: 0.85rem;
+        line-height: 1.6;
     }
     
     .info-box strong {
         color: #1e40af;
+        font-size: 0.95rem;
+        display: block;
+        margin-bottom: 0.3rem;
+    }
+    
+    /* Result Card - Mobile */
+    .result-card {
+        padding: 1rem;
+        border-radius: 12px;
+        background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+        border: 2px solid #10b981;
+        margin: 1rem 0;
+        box-shadow: 0 4px 15px rgba(16, 185, 129, 0.2);
+    }
+    
+    .result-card h3 {
+        margin: 0 0 0.5rem 0;
+        color: #059669;
         font-size: 1.1rem;
     }
     
-    /* Result Card */
-    .result-card {
-        padding: 2rem;
-        border-radius: 20px;
-        background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
-        border: 2px solid #10b981;
-        margin: 2rem 0;
-        box-shadow: 0 10px 30px rgba(16, 185, 129, 0.2);
-        animation: scaleIn 0.5s ease-out;
-        transition: transform 0.3s ease;
+    .result-card p {
+        margin: 0.3rem 0;
+        font-size: 0.9rem;
     }
     
-    .result-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 15px 40px rgba(16, 185, 129, 0.3);
+    .result-card .jurusan-name {
+        font-size: 1.3rem !important;
+        color: #047857;
+        font-weight: 800;
+        margin: 0.5rem 0 !important;
     }
     
-    /* Button Styling */
+    .result-card .nilai-saw {
+        font-size: 1.1rem !important;
+        color: #059669;
+        font-weight: 700;
+    }
+    
+    /* Button - Mobile Touch Friendly */
     .stButton>button {
         width: 100%;
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         color: white;
         font-weight: 700;
-        padding: 0.8rem 1.5rem;
-        border-radius: 12px;
+        padding: 0.8rem;
+        border-radius: 10px;
         border: none;
-        font-size: 1.1rem;
-        box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
-        transition: all 0.3s ease;
+        font-size: 0.95rem;
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        transition: all 0.2s ease;
         text-transform: uppercase;
         letter-spacing: 0.5px;
-    }
-    
-    .stButton>button:hover {
-        background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
-        transform: translateY(-2px);
-        box-shadow: 0 12px 30px rgba(102, 126, 234, 0.4);
+        min-height: 48px; /* Touch target size */
     }
     
     .stButton>button:active {
-        transform: translateY(0);
+        transform: scale(0.98);
+        box-shadow: 0 2px 8px rgba(102, 126, 234, 0.4);
     }
     
-    /* Form Styling */
+    /* Form - Mobile Optimized */
     .stTextInput>div>div>input,
     .stNumberInput>div>div>input,
     .stSelectbox>div>div>select {
-        border-radius: 10px;
+        border-radius: 8px;
         border: 2px solid #e5e7eb;
-        padding: 0.7rem;
-        transition: all 0.3s ease;
-        font-size: 1rem;
+        padding: 0.6rem;
+        font-size: 0.95rem;
+        min-height: 44px; /* Touch friendly */
     }
     
     .stTextInput>div>div>input:focus,
@@ -166,14 +193,21 @@ st.markdown("""
         box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
     }
     
-    /* Slider Styling */
-    .stSlider>div>div>div>div {
-        background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+    /* Slider - Mobile */
+    .stSlider {
+        padding: 0.5rem 0;
     }
     
-    /* Metric Styling */
+    /* Metrics - Mobile */
+    div[data-testid="stMetric"] {
+        background: #f9fafb;
+        padding: 0.8rem;
+        border-radius: 8px;
+        border: 1px solid #e5e7eb;
+    }
+    
     div[data-testid="stMetricValue"] {
-        font-size: 2rem;
+        font-size: 1.3rem;
         font-weight: 800;
         background: linear-gradient(135deg, #10b981 0%, #059669 100%);
         -webkit-background-clip: text;
@@ -184,138 +218,79 @@ st.markdown("""
     div[data-testid="stMetricLabel"] {
         font-weight: 600;
         color: #374151;
-        font-size: 0.95rem;
+        font-size: 0.8rem;
     }
     
-    /* Dataframe Styling */
+    /* Dataframe - Mobile */
     .dataframe {
-        border-radius: 12px;
-        overflow: hidden;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        font-size: 0.85rem;
+        border-radius: 8px;
+        overflow-x: auto;
     }
     
-    /* Expander Styling */
+    /* Expander - Mobile */
     .streamlit-expanderHeader {
         background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
-        border-radius: 10px;
+        border-radius: 8px;
         font-weight: 600;
         color: #1f2937;
-        padding: 1rem;
-        transition: all 0.3s ease;
+        padding: 0.8rem;
+        font-size: 0.9rem;
     }
     
-    .streamlit-expanderHeader:hover {
-        background: linear-gradient(135deg, #e5e7eb 0%, #d1d5db 100%);
-    }
-    
-    /* Download Button */
+    /* Download Button - Mobile */
     .stDownloadButton>button {
         background: linear-gradient(135deg, #10b981 0%, #059669 100%);
         color: white;
         font-weight: 600;
-        border-radius: 10px;
-        padding: 0.7rem 1.5rem;
+        border-radius: 8px;
+        padding: 0.6rem;
         border: none;
-        box-shadow: 0 6px 15px rgba(16, 185, 129, 0.3);
-        transition: all 0.3s ease;
+        box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+        font-size: 0.85rem;
+        min-height: 44px;
+        width: 100%;
     }
     
-    .stDownloadButton>button:hover {
-        background: linear-gradient(135deg, #059669 0%, #047857 100%);
-        transform: translateY(-2px);
-        box-shadow: 0 8px 20px rgba(16, 185, 129, 0.4);
+    .stDownloadButton>button:active {
+        transform: scale(0.98);
     }
     
-    /* Subheader Styling */
-    h2, h3 {
+    /* Subheaders - Mobile */
+    h2 {
         color: #1f2937;
         font-weight: 700;
-        margin-top: 1.5rem;
-        margin-bottom: 1rem;
+        font-size: 1.2rem;
+        margin: 1rem 0 0.5rem 0;
     }
     
-    /* Badge/Pill Styling */
-    .badge {
-        display: inline-block;
-        padding: 0.3rem 0.8rem;
-        border-radius: 20px;
-        font-size: 0.85rem;
-        font-weight: 600;
-        margin: 0.2rem;
+    h3 {
+        color: #1f2937;
+        font-weight: 700;
+        font-size: 1rem;
+        margin: 0.8rem 0 0.4rem 0;
     }
     
-    .badge-blue {
-        background: #dbeafe;
-        color: #1e40af;
-    }
-    
-    .badge-green {
-        background: #d1fae5;
-        color: #065f46;
-    }
-    
-    .badge-purple {
-        background: #ede9fe;
-        color: #5b21b6;
-    }
-    
-    /* Animations */
-    @keyframes fadeInDown {
-        from {
-            opacity: 0;
-            transform: translateY(-30px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-    
-    @keyframes fadeInUp {
-        from {
-            opacity: 0;
-            transform: translateY(30px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-    
-    @keyframes slideInLeft {
-        from {
-            opacity: 0;
-            transform: translateX(-30px);
-        }
-        to {
-            opacity: 1;
-            transform: translateX(0);
-        }
-    }
-    
-    @keyframes scaleIn {
-        from {
-            opacity: 0;
-            transform: scale(0.9);
-        }
-        to {
-            opacity: 1;
-            transform: scale(1);
-        }
-    }
-    
-    /* Success/Error/Info Messages */
+    /* Messages - Mobile */
     .stSuccess, .stError, .stWarning, .stInfo {
-        border-radius: 12px;
-        padding: 1rem 1.5rem;
+        border-radius: 10px;
+        padding: 0.8rem;
         font-weight: 500;
-        animation: slideInLeft 0.5s ease-out;
+        font-size: 0.9rem;
     }
     
-    /* Caption Styling */
+    /* Caption - Mobile */
     .stCaptionContainer {
         color: #6b7280;
-        font-size: 0.9rem;
+        font-size: 0.8rem;
+        line-height: 1.5;
+    }
+    
+    /* Chart - Mobile */
+    .element-container:has(canvas) {
+        margin: 1rem 0;
+        border-radius: 10px;
+        overflow: hidden;
     }
     
     /* Spinner */
@@ -323,48 +298,23 @@ st.markdown("""
         border-top-color: #667eea !important;
     }
     
-    /* Chart Container */
-    .element-container:has(.stPlotlyChart),
-    .element-container:has(canvas) {
-        border-radius: 15px;
-        overflow: hidden;
-        box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-        margin: 1.5rem 0;
-    }
+    /* ==========================================
+       TABLET & DESKTOP IMPROVEMENTS
+       ========================================== */
     
-    /* ========================================
-       RESPONSIVE DESIGN - MOBILE OPTIMIZATION
-       ======================================== */
-    
-    /* Tablet & Small Desktop (max-width: 1024px) */
-    @media (max-width: 1024px) {
-        .main-header {
-            font-size: 2.5rem;
-        }
-        
-        .block-container {
-            padding: 1.5rem 2rem;
-        }
-        
-        .result-card {
+    /* Tablet (min-width: 768px) */
+    @media (min-width: 768px) {
+        .main {
             padding: 1.5rem;
         }
-    }
-    
-    /* Mobile Landscape & Small Tablets (max-width: 768px) */
-    @media (max-width: 768px) {
-        .main {
-            padding: 1rem;
-        }
         
         .block-container {
-            padding: 1rem 1.5rem;
+            padding: 2rem;
             border-radius: 15px;
         }
         
         .main-header {
-            font-size: 2rem;
-            letter-spacing: -0.5px;
+            font-size: 2.5rem;
         }
         
         .sub-header {
@@ -373,222 +323,234 @@ st.markdown("""
         }
         
         .info-box {
-            padding: 1rem;
+            padding: 1.2rem;
             font-size: 0.95rem;
         }
         
         .result-card {
-            padding: 1.2rem;
+            padding: 1.5rem;
         }
         
         .result-card h3 {
             font-size: 1.3rem;
         }
         
-        .result-card p {
-            font-size: 1rem !important;
+        .result-card .jurusan-name {
+            font-size: 1.5rem !important;
         }
         
         .stButton>button {
-            padding: 0.7rem 1rem;
-            font-size: 0.95rem;
+            font-size: 1rem;
+            padding: 0.8rem 1.5rem;
         }
         
         div[data-testid="stMetricValue"] {
+            font-size: 1.8rem;
+        }
+        
+        h2 {
             font-size: 1.5rem;
         }
         
-        div[data-testid="stMetricLabel"] {
-            font-size: 0.85rem;
+        h3 {
+            font-size: 1.2rem;
         }
         
-        /* Chart pada mobile */
-        .element-container:has(canvas) {
-            margin: 1rem 0;
-        }
-        
-        /* Sidebar di mobile */
         [data-testid="stSidebar"] {
-            padding: 1.5rem 0.8rem;
+            padding: 1.5rem 1rem;
+        }
+        
+        [data-testid="stSidebar"] h1 {
+            font-size: 1.5rem;
+        }
+        
+        [data-testid="stSidebar"] h3 {
+            font-size: 1.1rem;
         }
     }
     
-    /* Mobile Portrait (max-width: 480px) */
-    @media (max-width: 480px) {
+    /* Desktop (min-width: 1024px) */
+    @media (min-width: 1024px) {
+        .main {
+            padding: 2rem;
+        }
+        
+        .block-container {
+            padding: 2.5rem 3rem;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        
+        .main-header {
+            font-size: 3rem;
+            letter-spacing: -1px;
+        }
+        
+        .sub-header {
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .info-box {
+            padding: 1.5rem;
+            font-size: 1rem;
+            border-radius: 15px;
+        }
+        
+        .result-card {
+            padding: 2rem;
+            border-radius: 20px;
+            transition: transform 0.3s ease;
+        }
+        
+        .result-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(16, 185, 129, 0.3);
+        }
+        
+        .result-card h3 {
+            font-size: 1.5rem;
+        }
+        
+        .result-card .jurusan-name {
+            font-size: 1.6rem !important;
+        }
+        
+        .result-card .nilai-saw {
+            font-size: 1.3rem !important;
+        }
+        
+        .stButton>button {
+            font-size: 1.1rem;
+            padding: 0.8rem 1.5rem;
+        }
+        
+        .stButton>button:hover {
+            background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 12px 30px rgba(102, 126, 234, 0.4);
+        }
+        
+        .stDownloadButton>button:hover {
+            background: linear-gradient(135deg, #059669 0%, #047857 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(16, 185, 129, 0.4);
+        }
+        
+        div[data-testid="stMetricValue"] {
+            font-size: 2rem;
+        }
+        
+        div[data-testid="stMetricLabel"] {
+            font-size: 0.95rem;
+        }
+        
+        h2 {
+            font-size: 1.8rem;
+        }
+        
+        h3 {
+            font-size: 1.4rem;
+        }
+        
+        [data-testid="stSidebar"] {
+            padding: 2rem 1rem;
+        }
+        
+        [data-testid="stSidebar"] h1 {
+            font-size: 1.5rem;
+        }
+    }
+    
+    /* Large Desktop (min-width: 1440px) */
+    @media (min-width: 1440px) {
+        .block-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+    }
+    
+    /* Landscape Optimization */
+    @media (max-height: 600px) and (orientation: landscape) {
         .main {
             padding: 0.5rem;
         }
         
         .block-container {
-            padding: 0.8rem 1rem;
-            border-radius: 12px;
-        }
-        
-        .main-header {
-            font-size: 1.5rem;
-            letter-spacing: 0;
-            line-height: 1.3;
-        }
-        
-        .sub-header {
-            font-size: 0.9rem;
-            margin-bottom: 1rem;
-        }
-        
-        .info-box {
-            padding: 0.8rem;
-            font-size: 0.85rem;
-            border-radius: 10px;
-        }
-        
-        .info-box strong {
-            font-size: 0.95rem;
-        }
-        
-        .result-card {
             padding: 1rem;
-            border-radius: 12px;
-            margin: 1rem 0;
         }
         
-        .result-card h3 {
-            font-size: 1.1rem;
-        }
-        
-        .result-card p {
-            font-size: 0.9rem !important;
-            margin: 5px 0 !important;
-        }
-        
-        .result-card p:nth-child(3) {
-            font-size: 1.2rem !important;
-        }
-        
-        .result-card p:nth-child(4) strong {
-            font-size: 1.1rem !important;
-        }
-        
-        .stButton>button {
-            padding: 0.6rem 0.8rem;
-            font-size: 0.85rem;
-            letter-spacing: 0.3px;
-            border-radius: 10px;
-        }
-        
-        .stDownloadButton>button {
-            padding: 0.5rem 1rem;
-            font-size: 0.85rem;
-        }
-        
-        div[data-testid="stMetricValue"] {
-            font-size: 1.2rem;
-        }
-        
-        div[data-testid="stMetricLabel"] {
-            font-size: 0.75rem;
-        }
-        
-        /* Form inputs di mobile */
-        .stTextInput>div>div>input,
-        .stNumberInput>div>div>input,
-        .stSelectbox>div>div>select {
-            padding: 0.5rem;
-            font-size: 0.9rem;
-            border-radius: 8px;
-        }
-        
-        /* Subheader di mobile */
-        h2 {
-            font-size: 1.3rem;
-        }
-        
-        h3 {
-            font-size: 1.1rem;
-        }
-        
-        /* Sidebar di mobile */
-        [data-testid="stSidebar"] {
-            padding: 1rem 0.5rem;
-        }
-        
-        [data-testid="stSidebar"] h1 {
-            font-size: 1.3rem;
-        }
-        
-        [data-testid="stSidebar"] h3 {
-            font-size: 1rem;
-        }
-        
-        /* Dataframe di mobile */
-        .dataframe {
-            font-size: 0.85rem;
-        }
-        
-        /* Expander di mobile */
-        .streamlit-expanderHeader {
-            padding: 0.7rem;
-            font-size: 0.9rem;
-        }
-        
-        /* Caption di mobile */
-        .stCaptionContainer {
-            font-size: 0.8rem;
-        }
-    }
-    
-    /* Extra Small Mobile (max-width: 360px) */
-    @media (max-width: 360px) {
         .main-header {
             font-size: 1.3rem;
-        }
-        
-        .sub-header {
-            font-size: 0.85rem;
-        }
-        
-        .block-container {
-            padding: 0.5rem 0.8rem;
-        }
-        
-        .info-box {
-            padding: 0.6rem;
-            font-size: 0.8rem;
-        }
-        
-        .result-card {
-            padding: 0.8rem;
-        }
-        
-        .stButton>button {
-            font-size: 0.8rem;
-            padding: 0.5rem;
-        }
-        
-        div[data-testid="stMetricValue"] {
-            font-size: 1rem;
-        }
-    }
-    
-    /* Landscape orientation optimization */
-    @media (max-height: 600px) and (orientation: landscape) {
-        .main-header {
-            font-size: 1.5rem;
             margin-bottom: 0.3rem;
         }
         
         .sub-header {
-            font-size: 0.9rem;
+            font-size: 0.8rem;
             margin-bottom: 0.5rem;
         }
         
         .info-box {
-            padding: 0.7rem;
+            padding: 0.6rem;
             margin: 0.5rem 0;
         }
         
         .result-card {
             padding: 0.8rem;
             margin: 0.5rem 0;
+        }
+        
+        .stButton>button {
+            padding: 0.5rem;
+            min-height: 40px;
+        }
+    }
+    
+    /* Animations - Only on Desktop */
+    @media (min-width: 1024px) {
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        .main-header {
+            animation: fadeInDown 0.8s ease-out;
+        }
+        
+        .sub-header {
+            animation: fadeInUp 0.8s ease-out;
+        }
+        
+        .info-box {
+            animation: slideInLeft 0.6s ease-out;
         }
     }
 </style>
@@ -599,7 +561,7 @@ st.markdown("""
 # ========================================
 with st.sidebar:
     try:
-        st.image("assets/Logo.png", width=150)
+        st.image("assets/Logo.png", width=120)  # Smaller on mobile
     except:
         st.markdown("# 🎓")
     
@@ -610,20 +572,19 @@ with st.sidebar:
     Aplikasi ini membantu siswa memilih jurusan kuliah yang tepat menggunakan metode SAW.
     
     ### Metode SAW
-    Simple Additive Weighting adalah metode penjumlahan terbobot yang mencari penjumlahan terbobot dari rating kinerja pada setiap alternatif.
+    Simple Additive Weighting adalah metode penjumlahan terbobot.
     
     ### Kriteria Penilaian
     """)
     
     for key, value in BOBOT_KRITERIA.items():
-        st.write(f"- **{key.replace('_', ' ').title()}:** {value*100}%")
+        st.write(f"• **{key.replace('_', ' ').title()}:** {value*100}%")
     
     st.markdown("---")
     st.markdown("""
     ### 📞 Bantuan
-    Jika ada pertanyaan, hubungi:
-    - Email: dhoniprasetya3@gmail.com
-    - GitHub: @14112240028
+    Email: dhoniprasetya3@gmail.com  
+    GitHub: @14112240028
     """)
 
 # ========================================
@@ -635,16 +596,16 @@ st.markdown('<p class="sub-header">Metode SAW (Simple Additive Weighting)</p>', 
 # Info box
 st.markdown("""
 <div class="info-box">
-    <strong>ℹ️ Cara Penggunaan:</strong><br>
-    1. Isi semua data siswa di form sebelah kiri<br>
-    2. Klik tombol "Hitung Rekomendasi"<br>
-    3. Lihat hasil rekomendasi dan ranking jurusan<br>
-    4. Ekspor hasil jika diperlukan
+    <strong>ℹ️ Cara Penggunaan</strong>
+    1. Isi data siswa di form<br>
+    2. Klik "Hitung Rekomendasi"<br>
+    3. Lihat hasil & ranking<br>
+    4. Download CSV (opsional)
 </div>
 """, unsafe_allow_html=True)
 
 # ========================================
-# LAYOUT 2 KOLOM
+# LAYOUT 2 KOLOM (AUTO STACK ON MOBILE)
 # ========================================
 col1, col2 = st.columns([1, 1.2])
 
@@ -652,14 +613,13 @@ col1, col2 = st.columns([1, 1.2])
 # KOLOM 1: FORM INPUT
 # ========================================
 with col1:
-    st.subheader("📝 Input Data Siswa")
+    st.subheader("📝 Input Data")
     
     with st.form("form_siswa"):
         # Nama
         nama = st.text_input(
             "Nama Lengkap *", 
-            placeholder="Contoh: Budi Santoso",
-            help="Masukkan nama lengkap siswa"
+            placeholder="Contoh: Budi Santoso"
         )
         
         # Nilai Akademik
@@ -668,63 +628,58 @@ with col1:
             min_value=0.0, 
             max_value=100.0, 
             value=0.0,
-            step=0.1,
-            help="Rata-rata nilai rapor atau ijazah siswa"
+            step=0.1
         )
         
         # Minat
         minat = st.selectbox(
-            "Minat Bidang Studi *",
-            ["", "IPA", "IPS", "Seni"],
-            help="Pilih bidang studi yang diminati siswa"
+            "Minat Bidang *",
+            ["", "IPA", "IPS", "Seni"]
         )
         
         # Ekonomi
         ekonomi = st.selectbox(
             "Kemampuan Ekonomi *",
-            ["", "Rendah", "Sedang", "Tinggi"],
-            help="Kemampuan keluarga dalam membiayai kuliah"
+            ["", "Rendah", "Sedang", "Tinggi"]
         )
         
-        st.markdown("**Keterangan Kemampuan Ekonomi:**")
-        st.caption("• Rendah: Lebih memilih biaya kuliah terjangkau")
-        st.caption("• Sedang: Biaya kuliah standar")
-        st.caption("• Tinggi: Biaya bukan masalah utama")
+        st.caption("• Rendah: Biaya terjangkau")
+        st.caption("• Sedang: Biaya standar")
+        st.caption("• Tinggi: Biaya tidak masalah")
         
         # Prospek Kerja
         prospek_kerja = st.slider(
-            "Prioritas Prospek Kerja (0-100) *",
-            0, 100, 50,
-            help="Seberapa penting prospek kerja dalam memilih jurusan? (0=tidak penting, 100=sangat penting)"
+            "Prioritas Prospek Kerja *",
+            0, 100, 50
         )
         
         st.markdown("---")
         
         # Tombol Submit
         submit_button = st.form_submit_button(
-            "🔍 Hitung Rekomendasi",
+            "🔍 Hitung",
             use_container_width=True
         )
     
     # Info Jurusan Tersedia
-    with st.expander("📋 Lihat Daftar Jurusan Tersedia"):
+    with st.expander("📋 Daftar Jurusan"):
         for kode, data in JURUSAN_DATA.items():
             st.write(f"**{kode}:** {data['nama']}")
-            st.caption(f"└─ Minat: {data['minat']} | Biaya: {data['biaya']} | Prospek: {data['prospek']}/100")
+            st.caption(f"Minat: {data['minat']} | Biaya: {data['biaya']}")
 
 # ========================================
 # KOLOM 2: HASIL & VISUALISASI
 # ========================================
 with col2:
-    st.subheader("📊 Hasil Rekomendasi")
+    st.subheader("📊 Hasil")
     
     if submit_button:
         # Validasi input
         if not nama or not minat or not ekonomi or nilai_akademik == 0:
-            st.error("⚠️ **Mohon lengkapi semua data yang bertanda (*)**")
+            st.error("⚠️ Mohon lengkapi semua data!")
         else:
             # Hitung SAW
-            with st.spinner("⏳ Sedang menghitung..."):
+            with st.spinner("⏳ Menghitung..."):
                 hasil, detail = hitung_saw(
                     nilai_akademik, 
                     minat, 
@@ -735,143 +690,142 @@ with col2:
                 )
             
             # ===== REKOMENDASI TERBAIK =====
-            st.success("✅ Perhitungan selesai!")
+            st.success("✅ Selesai!")
             
             best = hasil[0]
             st.markdown(f"""
             <div class="result-card">
-                <h3 style="margin:0; color:#059669;">🏆 Rekomendasi Terbaik</h3>
-                <p style="margin:10px 0 5px 0;"><strong>Nama Siswa:</strong> {nama}</p>
-                <p style="margin:5px 0; font-size:1.6rem; color:#047857; font-weight:800;">
-                    {best['Jurusan']}
-                </p>
-                <p style="margin:5px 0; color:#065f46; font-size:1.1rem;">
-                    Nilai SAW: <strong style="color:#059669; font-size:1.3rem;">{best['Nilai SAW']:.4f}</strong>
-                </p>
+                <h3>🏆 Rekomendasi Terbaik</h3>
+                <p><strong>Nama:</strong> {nama}</p>
+                <p class="jurusan-name">{best['Jurusan']}</p>
+                <p>Nilai SAW: <span class="nilai-saw">{best['Nilai SAW']:.4f}</span></p>
             </div>
             """, unsafe_allow_html=True)
             
             # ===== METRICS =====
             met_col1, met_col2, met_col3 = st.columns(3)
             with met_col1:
-                st.metric("Ranking", "#1", delta="Terbaik")
+                st.metric("Ranking", "#1", delta="Top")
             with met_col2:
-                st.metric("Kode Jurusan", best['Kode'])
+                st.metric("Kode", best['Kode'])
             with met_col3:
                 gap = best['Nilai SAW'] - hasil[1]['Nilai SAW']
-                st.metric("Selisih Rank #2", f"{gap:.4f}")
+                st.metric("Gap", f"{gap:.3f}")
             
             st.markdown("---")
             
             # ===== TABEL RANKING =====
-            st.write("### 📋 Ranking Lengkap Semua Jurusan")
+            st.write("### 📋 Ranking Lengkap")
             
             df_hasil = pd.DataFrame(hasil)
             df_hasil['Ranking'] = range(1, len(df_hasil) + 1)
             df_hasil['Nilai SAW'] = df_hasil['Nilai SAW'].apply(lambda x: f"{x:.4f}")
             
-            # Styling dataframe
             st.dataframe(
                 df_hasil[['Ranking', 'Kode', 'Jurusan', 'Nilai SAW']],
                 use_container_width=True,
                 hide_index=True,
-                height=220
+                height=200
             )
             
-            # ===== VISUALISASI BAR CHART =====
-            st.write("### 📈 Visualisasi Perbandingan")
+            # ===== VISUALISASI =====
+            st.write("### 📈 Grafik")
             
-            fig, ax = plt.subplots(figsize=(10, 5))
+            fig, ax = plt.subplots(figsize=(10, 4))
             colors = ['#10b981', '#3b82f6', '#f59e0b', '#ef4444', '#6b7280']
             
             jurusan_names = [h['Jurusan'] for h in hasil]
             nilai_saw = [h['Nilai SAW'] for h in hasil]
             
-            bars = ax.barh(jurusan_names, nilai_saw, color=colors)
+            bars = ax.barh(jurusan_names, nilai_saw, color=colors, height=0.6)
             
-            ax.set_xlabel('Nilai SAW', fontsize=12, fontweight='bold')
-            ax.set_title('Perbandingan Nilai SAW Semua Jurusan', 
-                        fontsize=14, fontweight='bold', pad=20)
+            ax.set_xlabel('Nilai SAW', fontsize=11, fontweight='bold')
+            ax.set_title('Perbandingan Nilai SAW', fontsize=12, fontweight='bold', pad=15)
             ax.grid(axis='x', alpha=0.3, linestyle='--')
             
-            # Tambahkan nilai di ujung bar
             for i, (bar, nilai) in enumerate(zip(bars, nilai_saw)):
                 width = bar.get_width()
                 ax.text(width + 0.01, bar.get_y() + bar.get_height()/2, 
-                       f'{nilai:.4f}',
-                       ha='left', va='center', fontsize=10, fontweight='bold')
+                       f'{nilai:.3f}',
+                       ha='left', va='center', fontsize=9, fontweight='bold')
             
             plt.tight_layout()
             st.pyplot(fig)
             
-            # ===== DETAIL PERHITUNGAN =====
-            with st.expander("🔢 Lihat Detail Perhitungan Lengkap"):
-                st.write("**Tabel Nilai Normalisasi (R) dan Hasil Akhir:**")
+            # ===== DETAIL =====
+            with st.expander("🔢 Detail Perhitungan"):
+                st.write("**Nilai Normalisasi (R):**")
                 
                 df_detail = pd.DataFrame(detail)
                 df_detail = df_detail.round(4)
                 
                 st.dataframe(df_detail, use_container_width=True, hide_index=True)
                 
-                st.markdown("""
-                **Keterangan Kolom:**
-                - **R1:** Normalisasi Nilai Akademik (Benefit)
-                - **R2:** Normalisasi Minat (1.0 = cocok, 0.6 = tidak cocok)
-                - **R3:** Normalisasi Ekonomi (Cost - biaya kuliah)
-                - **R4:** Normalisasi Prospek Kerja (Benefit)
-                - **Total:** Hasil penjumlahan terbobot = (0.30×R1) + (0.35×R2) + (0.20×R3) + (0.15×R4)
+                st.caption("""
+                **Rumus:** Vi = Σ(Wj × Rij)
                 
-                **Rumus SAW:**
-                ```
-                Vi = Σ(Wj × Rij)
-                ```
-                Di mana:
-                - Vi = Nilai preferensi alternatif ke-i
-                - Wj = Bobot kriteria ke-j
-                - Rij = Rating kinerja ternormalisasi
+                • R1: Nilai Akademik (30%)
+                • R2: Minat (35%)
+                • R3: Ekonomi (20%)
+                • R4: Prospek (15%)
                 """)
             
-            # ===== TOMBOL EXPORT =====
+            # ===== EXPORT =====
             st.markdown("---")
-            exp_col1, exp_col2 = st.columns(2)
+            st.write("### 💾 Export Data")
+            exp_col1, exp_col2, exp_col3 = st.columns(3)
             
             with exp_col1:
-                # Export ke CSV
+            # Export CSV
                 csv = df_hasil.to_csv(index=False).encode('utf-8')
                 st.download_button(
-                    label="📥 Download Hasil (CSV)",
+                    label="📥 Hasil",
                     data=csv,
-                    file_name=f"hasil_spk_{nama.replace(' ', '_')}.csv",
+                    file_name=f"hasil_{nama.replace(' ', '_')}.csv",
                     mime="text/csv",
                     use_container_width=True
                 )
-            
+            # Export Detail Perhitungan
             with exp_col2:
-                # Export detail perhitungan
                 csv_detail = pd.DataFrame(detail).to_csv(index=False).encode('utf-8')
                 st.download_button(
-                    label="📥 Download Detail (CSV)",
+                    label="📥 Detail",
                     data=csv_detail,
-                    file_name=f"detail_perhitungan_{nama.replace(' ', '_')}.csv",
+                    file_name=f"detail_{nama.replace(' ', '_')}.csv",
                     mime="text/csv",
                     use_container_width=True
                 )
-    
+            with exp_col3:
+            # Export PDF Report
+                pdf_bytes = generate_pdf_report(
+                    nama = nama,
+                    nilai_akademik = nilai_akademik,
+                    minat = minat,
+                    ekonomi = ekonomi,
+                    prospek_kerja = prospek_kerja,
+                    hasil = hasil,
+                    detail = detail,
+                    bobot_kriteria = BOBOT_KRITERIA
+                )
+                st.download_button(
+                    label="📄 PDF Report",
+                    data=pdf_bytes,
+                    file_name=f"report_{nama.replace(' ', '_')}.pdf",
+                    mime="application/pdf",
+                    use_container_width=True
+                )
     else:
-        # Tampilan default sebelum hitung
-        st.info("👈 Silakan isi form di sebelah kiri dan klik tombol 'Hitung Rekomendasi'")
+        st.info("👈 Isi form dan klik tombol hitung")
         
         st.markdown("""
-        ### 🎯 Kriteria Penilaian
+        ### 🎯 Kriteria
         
-        Sistem ini menggunakan 4 kriteria utama:
+        Sistem menggunakan 4 kriteria:
         
-        1. **Nilai Akademik (30%)** - Kemampuan akademis siswa
-        2. **Minat (35%)** - Kesesuaian minat dengan jurusan
-        3. **Ekonomi (20%)** - Kemampuan biaya kuliah
-        4. **Prospek Kerja (15%)** - Peluang karir setelah lulus
-        
-        Semakin tinggi nilai SAW yang dihasilkan, semakin cocok jurusan tersebut dengan profil siswa.
+        1. **Nilai Akademik (30%)**
+        2. **Minat (35%)**
+        3. **Ekonomi (20%)**
+        4. **Prospek Kerja (15%)**
         """)
 
 # ========================================
@@ -879,10 +833,9 @@ with col2:
 # ========================================
 st.markdown("---")
 st.markdown("""
-<div style="text-align: center; color: #6b7280; font-size: 0.9rem; padding: 20px;">
-    <p style="margin: 5px 0;"><strong>📚 Sistem Pendukung Keputusan Pemilihan Jurusan</strong></p>
-    <p style="margin: 5px 0;">Menggunakan Metode SAW (Simple Additive Weighting)</p>
-    <p style="margin: 5px 0;">Dibuat untuk keperluan pembelajaran Mata Kuliah Sistem Pendukung Keputusan</p>
-    <p style="margin: 15px 0 5px 0; color: #9ca3af;">© 2024 - SPK Jurusan v1.0</p>
+<div style="text-align: center; color: #6b7280; font-size: 0.85rem; padding: 1rem;">
+    <p style="margin: 3px 0;"><strong>📚 SPK Pemilihan Jurusan</strong></p>
+    <p style="margin: 3px 0;">Metode SAW</p>
+    <p style="margin: 8px 0 3px 0; color: #9ca3af;">© 2024 v1.0</p>
 </div>
 """, unsafe_allow_html=True)
