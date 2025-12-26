@@ -600,7 +600,7 @@ st.markdown("""
     1. Isi data siswa di form<br>
     2. Klik "Hitung Rekomendasi"<br>
     3. Lihat hasil & ranking<br>
-    4. Download CSV (opsional)
+    4. Download PDF Report
 </div>
 """, unsafe_allow_html=True)
 
