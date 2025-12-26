@@ -75,7 +75,7 @@ st.markdown("""
 # SIDEBAR - INFO APLIKASI
 # ========================================
 with st.sidebar:
-    st.image("https://via.placeholder.com/150x150.png?text=SPK", width=150)
+    st.image("assets/Logo.png", width=150)
     st.title("📚 Informasi")
     
     st.markdown("""
