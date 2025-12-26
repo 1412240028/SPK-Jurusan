@@ -331,6 +331,266 @@ st.markdown("""
         box-shadow: 0 8px 25px rgba(0,0,0,0.1);
         margin: 1.5rem 0;
     }
+    
+    /* ========================================
+       RESPONSIVE DESIGN - MOBILE OPTIMIZATION
+       ======================================== */
+    
+    /* Tablet & Small Desktop (max-width: 1024px) */
+    @media (max-width: 1024px) {
+        .main-header {
+            font-size: 2.5rem;
+        }
+        
+        .block-container {
+            padding: 1.5rem 2rem;
+        }
+        
+        .result-card {
+            padding: 1.5rem;
+        }
+    }
+    
+    /* Mobile Landscape & Small Tablets (max-width: 768px) */
+    @media (max-width: 768px) {
+        .main {
+            padding: 1rem;
+        }
+        
+        .block-container {
+            padding: 1rem 1.5rem;
+            border-radius: 15px;
+        }
+        
+        .main-header {
+            font-size: 2rem;
+            letter-spacing: -0.5px;
+        }
+        
+        .sub-header {
+            font-size: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .info-box {
+            padding: 1rem;
+            font-size: 0.95rem;
+        }
+        
+        .result-card {
+            padding: 1.2rem;
+        }
+        
+        .result-card h3 {
+            font-size: 1.3rem;
+        }
+        
+        .result-card p {
+            font-size: 1rem !important;
+        }
+        
+        .stButton>button {
+            padding: 0.7rem 1rem;
+            font-size: 0.95rem;
+        }
+        
+        div[data-testid="stMetricValue"] {
+            font-size: 1.5rem;
+        }
+        
+        div[data-testid="stMetricLabel"] {
+            font-size: 0.85rem;
+        }
+        
+        /* Chart pada mobile */
+        .element-container:has(canvas) {
+            margin: 1rem 0;
+        }
+        
+        /* Sidebar di mobile */
+        [data-testid="stSidebar"] {
+            padding: 1.5rem 0.8rem;
+        }
+    }
+    
+    /* Mobile Portrait (max-width: 480px) */
+    @media (max-width: 480px) {
+        .main {
+            padding: 0.5rem;
+        }
+        
+        .block-container {
+            padding: 0.8rem 1rem;
+            border-radius: 12px;
+        }
+        
+        .main-header {
+            font-size: 1.5rem;
+            letter-spacing: 0;
+            line-height: 1.3;
+        }
+        
+        .sub-header {
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+        
+        .info-box {
+            padding: 0.8rem;
+            font-size: 0.85rem;
+            border-radius: 10px;
+        }
+        
+        .info-box strong {
+            font-size: 0.95rem;
+        }
+        
+        .result-card {
+            padding: 1rem;
+            border-radius: 12px;
+            margin: 1rem 0;
+        }
+        
+        .result-card h3 {
+            font-size: 1.1rem;
+        }
+        
+        .result-card p {
+            font-size: 0.9rem !important;
+            margin: 5px 0 !important;
+        }
+        
+        .result-card p:nth-child(3) {
+            font-size: 1.2rem !important;
+        }
+        
+        .result-card p:nth-child(4) strong {
+            font-size: 1.1rem !important;
+        }
+        
+        .stButton>button {
+            padding: 0.6rem 0.8rem;
+            font-size: 0.85rem;
+            letter-spacing: 0.3px;
+            border-radius: 10px;
+        }
+        
+        .stDownloadButton>button {
+            padding: 0.5rem 1rem;
+            font-size: 0.85rem;
+        }
+        
+        div[data-testid="stMetricValue"] {
+            font-size: 1.2rem;
+        }
+        
+        div[data-testid="stMetricLabel"] {
+            font-size: 0.75rem;
+        }
+        
+        /* Form inputs di mobile */
+        .stTextInput>div>div>input,
+        .stNumberInput>div>div>input,
+        .stSelectbox>div>div>select {
+            padding: 0.5rem;
+            font-size: 0.9rem;
+            border-radius: 8px;
+        }
+        
+        /* Subheader di mobile */
+        h2 {
+            font-size: 1.3rem;
+        }
+        
+        h3 {
+            font-size: 1.1rem;
+        }
+        
+        /* Sidebar di mobile */
+        [data-testid="stSidebar"] {
+            padding: 1rem 0.5rem;
+        }
+        
+        [data-testid="stSidebar"] h1 {
+            font-size: 1.3rem;
+        }
+        
+        [data-testid="stSidebar"] h3 {
+            font-size: 1rem;
+        }
+        
+        /* Dataframe di mobile */
+        .dataframe {
+            font-size: 0.85rem;
+        }
+        
+        /* Expander di mobile */
+        .streamlit-expanderHeader {
+            padding: 0.7rem;
+            font-size: 0.9rem;
+        }
+        
+        /* Caption di mobile */
+        .stCaptionContainer {
+            font-size: 0.8rem;
+        }
+    }
+    
+    /* Extra Small Mobile (max-width: 360px) */
+    @media (max-width: 360px) {
+        .main-header {
+            font-size: 1.3rem;
+        }
+        
+        .sub-header {
+            font-size: 0.85rem;
+        }
+        
+        .block-container {
+            padding: 0.5rem 0.8rem;
+        }
+        
+        .info-box {
+            padding: 0.6rem;
+            font-size: 0.8rem;
+        }
+        
+        .result-card {
+            padding: 0.8rem;
+        }
+        
+        .stButton>button {
+            font-size: 0.8rem;
+            padding: 0.5rem;
+        }
+        
+        div[data-testid="stMetricValue"] {
+            font-size: 1rem;
+        }
+    }
+    
+    /* Landscape orientation optimization */
+    @media (max-height: 600px) and (orientation: landscape) {
+        .main-header {
+            font-size: 1.5rem;
+            margin-bottom: 0.3rem;
+        }
+        
+        .sub-header {
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .info-box {
+            padding: 0.7rem;
+            margin: 0.5rem 0;
+        }
+        
+        .result-card {
+            padding: 0.8rem;
+            margin: 0.5rem 0;
+        }
+    }
 </style>
 """, unsafe_allow_html=True)
 
